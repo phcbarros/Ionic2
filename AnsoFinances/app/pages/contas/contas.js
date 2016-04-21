@@ -19,7 +19,6 @@ export class ContasPage {
         this._nav = nav;    
     }
     
-    
     getList() {
         this.dao.getList((data) => {
             this.contas = data;

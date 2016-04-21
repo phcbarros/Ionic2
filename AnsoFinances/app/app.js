@@ -18,7 +18,7 @@ export class MyApp {
     this.home = HomePage;
     this.contas = ContasPage;
 
-    this.rootPage = this.contas;
+    this.rootPage = this.home;
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

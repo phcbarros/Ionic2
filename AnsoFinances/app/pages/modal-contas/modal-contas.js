@@ -1,7 +1,8 @@
 import { Page, ViewController, NavParams } from 'ionic-angular';
+import { Conta } from '../../model/conta';
 
 @Page({
-  templateUrl: 'build/pages/modal-contas/modal-contas.html',
+  templateUrl: 'build/pages/modal-contas/modal-contas.html'
 })
 
 export class ModalContasPage {
@@ -12,8 +13,7 @@ export class ModalContasPage {
   
   constructor(view, params) {
     this._view = view;
-    
-    this.conta = params.get('parametro') || { descricao: '' };
+    this.conta = params.get('parametro') ||  new Conta();
   }
   
   close() {

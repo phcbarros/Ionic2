@@ -1,6 +1,8 @@
 import { Injectable } from 'angular2/core';
 import { Storage, SqlStorage} from 'ionic-angular';
+import { Conta } from '../model/conta';
 
+@Injectable()
 export class DAOContas {
     constructor() {
         let storage = this.createSqlStorate();
@@ -12,7 +14,7 @@ export class DAOContas {
     
     getList(cb) {
         let storage = this.createSqlStorate();
-       
+              
         storage.query("SELECT id, descricao FROM contas")
             .then((data) => {
                 let list = [];
@@ -21,19 +23,17 @@ export class DAOContas {
                 let rows = data.res.rows;
                 
                 for (; length--; i++) {
-                    let item = {};
-                    
-                    item.id = rows.item(i).id;
-                    item.descricao = rows.item(i).descricao;
-                    
+                    let id = rows.item(i).id;
+                    let descricao = rows.item(i).descricao;
+                    let item = new Conta(id, descricao);
+                                       
                     list.push(item);                     
                 }
                 
                 cb(list);
-                
+                                
             })
-            .catch((error) => errorHandler('Erro ao recuperar dos dados', error));
-       
+            .catch((error) => { this.errorHandler('Erro ao recuperar dos dados', error)});
     }
     
     save(conta, cb) {
@@ -45,7 +45,7 @@ export class DAOContas {
                 cb(conta);
                 console.log('Gravou', conta);
             })
-            .catch((error) => errorHandler('Erro na inserção de dados', error));
+            .catch((error) => this.errorHandler('Erro na inserção de dados', error));
     }
     
     edit(conta, cb) {
@@ -56,7 +56,7 @@ export class DAOContas {
                 cb(conta);
                 console.log('Editou', conta);
             })
-            .catch((error) => errorHandler('Erro na edição de dados', error));
+            .catch((error) => this.errorHandler('Erro na edição de dados', error));
     }
     
     delete(conta, cb) {
@@ -66,7 +66,7 @@ export class DAOContas {
             .then((data) => {
                 cb(conta);
             })
-            .catch((error) => errorHandler('Erro na exclusão de dados', error));
+            .catch((error) => this.errorHandler('Erro na exclusão de dados', error));
     } 
     
     createSqlStorate(){
@@ -74,6 +74,6 @@ export class DAOContas {
     }
     
     errorHandler(message, error){
-        console.log(message, error)
+        console.log(message, error);
     }
 }
