@@ -15,24 +15,42 @@ export class ContasPage {
     
     constructor(nav, dao) {
         this.dao = dao;
-        this.contas = this.dao.getList();
+        this.getList();
         this._nav = nav;    
+    }
+    
+    
+    getList() {
+        this.dao.getList((data) => {
+            this.contas = data;
+        });
     }
     
     insert() {
         let modal = this.createModal();
-        this.onModalDismiss(modal, (data) => this.dao.save(data));
+        this.onModalDismiss(modal, (data) => {
+            this.dao.save(data, (conta) => {
+                this.contas.push(conta);
+            })
+        });
         this.showModal(modal);        
     }
     
     edit(conta){
         let modal = this.createModal(conta);
-        this.onModalDismiss(modal, (data) => this.dao.edit(data));
+        this.onModalDismiss(modal, (data) => {
+            this.dao.edit(data, (conta) => {
+                
+            });
+        });
         this.showModal(modal);        
     }
     
     delete(conta) {
-        this.dao.delete(conta);
+        this.dao.delete(conta, (data) => {
+            let index = this.contas.indexOf(conta);
+            this.contas.splice(index, 1);  
+        });
     }
     
     createModal(parametro) {
