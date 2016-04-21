@@ -1,0 +1,22 @@
+<ion-navbar>
+    <ion-title>Contas</ion-title>
+    <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+</ion-navbar>
+
+<ion-content>
+    <ion-list>
+        <ion-item-sliding *ngFor="#conta of contas">
+            <ion-item (click)="edit(conta)">
+                {{ conta.descricao }}
+            </ion-item>
+            <ion-item-options>
+            <button danger (click)="delete(conta)">Excluir</button>    
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+    <button fab fab-bottom fab-right danger (click)="insert()">
+        <ion-icon name="add"></ion-icon>
+    </button>
+</ion-content>
