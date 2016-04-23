@@ -74,6 +74,6 @@ export class DAOContas {
     }
     
     errorHandler(message, error){
-        console.log(message, error);
+        console.error(message, error);
     }
 }

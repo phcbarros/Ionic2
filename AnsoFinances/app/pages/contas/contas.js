@@ -1,70 +1,99 @@
-import { Page, Modal, NavController } from 'ionic-angular';
+import { Page, Modal, NavController, Alert } from 'ionic-angular';
 import { DAOContas } from '../../dao/dao-contas';
 import { ModalContasPage } from '../modal-contas/modal-contas';
+import { ToastService } from '../../service/toast.service';
 
 @Page({
     templateUrl: 'build/pages/contas/contas.html',
-    providers: [DAOContas]
+    providers: [DAOContas, ToastService]
 })
 
 export class ContasPage {
-    
+
     static get parameters() {
-        return [[NavController], [DAOContas]]
+        return [[NavController], [DAOContas], [ToastService]]
     }
-    
-    constructor(nav, dao) {
-        this.dao = dao;
+
+    constructor(nav, dao, toastService) {
+        this._dao = dao;
+        this._nav = nav;
+        this._toast = toastService;
         this.getList();
-        this._nav = nav;    
     }
-    
+
     getList() {
-        this.dao.getList((data) => {
+        this._dao.getList((data) => {
             this.contas = data;
         });
     }
-    
+
     insert() {
         let modal = this.createModal();
         this.onModalDismiss(modal, (data) => {
-            this.dao.save(data, (conta) => {
+            if (!data) return;
+            this._dao.save(data, (conta) => {
                 this.contas.push(conta);
-            })
-        });
-        this.showModal(modal);        
-    }
-    
-    edit(conta){
-        let modal = this.createModal(conta);
-        this.onModalDismiss(modal, (data) => {
-            this.dao.edit(data, (conta) => {
-                
+                this.showToast('Conta adicionada com sucesso!');
             });
         });
-        this.showModal(modal);        
+        this.showModal(modal);
     }
-    
+
+    edit(conta) {
+        let modal = this.createModal(conta);
+        this.onModalDismiss(modal, (data) => {
+            this._dao.edit(data, (conta) => {
+                this.showToast('Conta alterada com sucesso!');
+            });
+        });
+        this.showModal(modal);
+    }
+
     delete(conta) {
-        this.dao.delete(conta, (data) => {
+        let confirm = Alert.create({
+            title: 'Excluir',
+            body: `Deseja realmente excluir a conta ${conta.descricao}?`,
+            buttons: [
+                {
+                    text: 'Sim',
+                    handler: () => {
+                        this.confirmDelete(conta);
+                    }
+                },
+                {
+                    text: 'Não'
+                }
+            ]
+        });
+
+        this._nav.present(confirm);
+    }
+
+    confirmDelete(conta) {
+        this._dao.delete(conta, (data) => {
             let index = this.contas.indexOf(conta);
-            this.contas.splice(index, 1);  
+            this.contas.splice(index, 1);
+            this.showToast('Conta excluída com sucesso!');
         });
     }
-    
+
     createModal(parametro) {
-        let modal = parametro 
-            ? Modal.create(ModalContasPage, { parametro: parametro}) 
+        let modal = parametro
+            ? Modal.create(ModalContasPage, { parametro: parametro })
             : Modal.create(ModalContasPage);
-        
+
         return modal;
     }
-    
+
     showModal(modal) {
         this._nav.present(modal);
     }
-    
+
     onModalDismiss(modal, cb) {
         modal.onDismiss(cb);
+    }
+
+    showToast(message) {
+        this._toast.showShortBottom(message).subscribe((toast) => console.log(toast));
     }
 }
