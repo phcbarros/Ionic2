@@ -11,16 +11,16 @@ export class ModalContasPage {
     return [[ViewController], [NavParams]];
   }
   
-  constructor(view, params) {
+  constructor(view, params, conta) {
     this._view = view;
-    this.conta = params.get('parametro') ||  new Conta();
+    this.conta = params.get('parametro') || new Conta();
   }
   
   close() {
     this._view.dismiss(); 
   }
   
-  save(conta) {
-    this._view.dismiss(conta);
+  save() {
+    this._view.dismiss(this.conta);
   }
 }
