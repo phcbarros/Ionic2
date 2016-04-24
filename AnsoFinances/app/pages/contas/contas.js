@@ -2,10 +2,11 @@ import { Page, Modal, NavController, Alert } from 'ionic-angular';
 import { DAOContas } from '../../dao/dao-contas';
 import { ModalContasPage } from '../modal-contas/modal-contas';
 import { ToastService } from '../../service/toast.service';
+import { provide } from 'angular2/core';
 
 @Page({
     templateUrl: 'build/pages/contas/contas.html',
-    providers: [DAOContas]
+    providers: [provide(DAOContas, {useClass: DAOContas})]
 })
 
 export class ContasPage {
