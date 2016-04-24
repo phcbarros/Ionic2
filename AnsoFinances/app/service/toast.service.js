@@ -7,4 +7,8 @@ export class ToastService {
     showShortBottom(message) {
         return Toast.showShortBottom(message);
     }
+    
+    showLongCenter(message) {
+        return Toast.showLongCenter(message);
+    }
 }

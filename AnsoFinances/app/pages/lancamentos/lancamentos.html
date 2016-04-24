@@ -1,0 +1,26 @@
+<ion-navbar *navbar>
+  <ion-title>Lançamentos</ion-title>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+</ion-navbar>
+
+<ion-content padding class="lancamentos">
+  <ion-list>
+    <ion-item *ngFor="#item of lancamentos">
+      <ion-row>
+        <ion-col width="67">
+          <h2>{{item.descricao}}</h2>
+          <p>{{item.conta}}</p>
+        </ion-col>
+        <ion-col width="33">
+          <p>{{item.valor}}</p>
+          <p>{{item.pago}}</p>  
+        </ion-col>
+      </ion-row>  
+    </ion-item>
+  </ion-list>
+  <button fab fab-bottom fab-right danger (click)="insert()">
+    <ion-icon name="add"></ion-icon>
+  </button>
+</ion-content>

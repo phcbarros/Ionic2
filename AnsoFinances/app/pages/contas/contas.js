@@ -5,47 +5,51 @@ import { ToastService } from '../../service/toast.service';
 
 @Page({
     templateUrl: 'build/pages/contas/contas.html',
-    providers: [DAOContas, ToastService]
+    providers: [DAOContas]
 })
 
 export class ContasPage {
-
     static get parameters() {
         return [[NavController], [DAOContas], [ToastService]]
     }
 
     constructor(nav, dao, toastService) {
-        this._dao = dao;
-        this._nav = nav;
-        this._toast = toastService;
+        this.dao = dao;
+        this.nav = nav;
+        this.toast = toastService;
         this.getList();
     }
 
     getList() {
-        this._dao.getList((data) => {
-            this.contas = data;
-        });
+        this.dao.getList(
+            (data) => this.contas = data,
+            (erro) => this.showToast(erro));
     }
 
     insert() {
         let modal = this.createModal();
         this.onModalDismiss(modal, (data) => {
             if (!data) return;
-            this._dao.save(data, (conta) => {
+            this.dao.save(data, (conta) => {
                 this.contas.push(conta);
                 this.showToast('Conta adicionada com sucesso!');
             });
-        });
+        }, 
+        (erro) => this.showToast(erro));
+        
         this.showModal(modal);
     }
 
     edit(conta) {
+        //TODO bug alterar 
         let modal = this.createModal(conta);
         this.onModalDismiss(modal, (data) => {
-            this._dao.edit(data, (conta) => {
+            this.dao.edit(data, (conta) => {
                 this.showToast('Conta alterada com sucesso!');
             });
-        });
+        },  
+        (erro) => this.showToast(erro));
+        
         this.showModal(modal);
     }
 
@@ -56,9 +60,7 @@ export class ContasPage {
             buttons: [
                 {
                     text: 'Sim',
-                    handler: () => {
-                        this.confirmDelete(conta);
-                    }
+                    handler: () => this.confirmDelete(conta)
                 },
                 {
                     text: 'Não'
@@ -66,15 +68,16 @@ export class ContasPage {
             ]
         });
 
-        this._nav.present(confirm);
+        this.nav.present(confirm);
     }
 
     confirmDelete(conta) {
-        this._dao.delete(conta, (data) => {
+        this.dao.delete(conta, (data) => {
             let index = this.contas.indexOf(conta);
             this.contas.splice(index, 1);
             this.showToast('Conta excluída com sucesso!');
-        });
+        }, 
+        (erro) => this.showToast(erro));
     }
 
     createModal(parametro) {
@@ -86,7 +89,7 @@ export class ContasPage {
     }
 
     showModal(modal) {
-        this._nav.present(modal);
+        this.nav.present(modal);
     }
 
     onModalDismiss(modal, cb) {
@@ -94,6 +97,6 @@ export class ContasPage {
     }
 
     showToast(message) {
-        this._toast.showShortBottom(message).subscribe((toast) => console.log(toast));
+        this.toast.showShortBottom(message).subscribe((toast) => console.log(toast));
     }
 }

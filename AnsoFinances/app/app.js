@@ -3,11 +3,14 @@ import { StatusBar } from 'ionic-native';
 import { HomePage } from './pages/home/home';
 import { ContasPage } from './pages/contas/contas';
 import { SqlStorageService } from './service/sql-storage.service';
+import { ToastService } from './service/toast.service';
 
 @App({
   templateUrl: 'build/app.html',
-  config: {}, // http://ionicframework.com/docs/v2/api/config/Config/
-  providers: [SqlStorageService]
+  config: {
+    mode: 'md'
+  }, // http://ionicframework.com/docs/v2/api/config/Config/
+  providers: [SqlStorageService, ToastService]
 })
 
 export class MyApp {

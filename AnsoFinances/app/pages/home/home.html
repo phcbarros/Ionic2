@@ -1,19 +1,4 @@
-<ion-navbar *navbar>
-  <ion-title>
-    Home
-  </ion-title>
-  <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-    </button>
-</ion-navbar>
-
-<ion-content class="home">
-  <ion-card>
-    <ion-card-header>
-      Card Header
-    </ion-card-header>
-    <ion-card-content>
-      Hello World
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+<ion-tabs primary>
+  <ion-tab [root]="lancamentos" tabTitle="Lançamentos">
+  </ion-tab>  
+</ion-tabs>

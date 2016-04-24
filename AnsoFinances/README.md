@@ -7,3 +7,4 @@
 1. Aula 3 - Cadastrando nossas contas (com modal) (https://www.youtube.com/watch?v=ZlCd-Ri83bU)
 1. Aula 4 - Acessando o banco de dados (https://www.youtube.com/watch?v=utXTMzFfSHQ)
 1. Aula 5 - Android antigo e Crosswalk (https://www.youtube.com/watch?v=YsptMbYrNGw)
+1. Aula 6 - Criando nosso lançamentos (https://www.youtube.com/watch?v=vXBuCpBoYgw)
