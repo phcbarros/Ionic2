@@ -6,19 +6,20 @@ import { DateService } from '../../service/date.service';
 
 @Page({
   templateUrl: 'build/pages/modal-lancamentos/modal-lancamentos.html',
-  providers: [DAOContas]
+  providers: [DAOContas, DateService]
 })
 
 export class ModalLancamentosPage {
   static get parameters() {
-    return [[NavController], [ViewController], [NavParams], [DAOContas], [ToastService]];
+    return [[NavController], [ViewController], [NavParams], [DAOContas], [ToastService], [DateService]];
   }
 
-  constructor(nav, view, params, daoContas, toast) {
+  constructor(nav, view, params, daoContas, toast, date) {
     this.nav = nav;
     this.view = view;
     this.daoContas = daoContas;
     this.toast = toast;
+    this.dateService = date;
     this.lancamento = params.get('parametro') || new Lancamento();
     
     this.descricao = this.lancamento.descricao;
@@ -42,8 +43,7 @@ export class ModalLancamentosPage {
   }
   
   save() {
-    let dataService = new DateService();
-    let data = dataService.parseDate(this.data);
+    let data = this.dateService.parseDate(this.data);
     
     this.lancamento.descricao = this.descricao;
     this.lancamento.valor = parseFloat(this.valor);
@@ -60,10 +60,9 @@ export class ModalLancamentosPage {
   }
   
   _getDate(date) {
-      let dataService = new DateService();
-      let data =  dataService.formatDate(date);
+      let dataFormatada =  this.dateService.formatDate(date);
       
-      return data;
+      return dataFormatada;
   }
   
 }

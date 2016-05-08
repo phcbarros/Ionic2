@@ -2,6 +2,7 @@ import { Page, NavController, Modal, Alert } from 'ionic-angular';
 import { ModalLancamentosPage } from '../modal-lancamentos/modal-lancamentos';
 import { DAOLancamentos } from '../../dao/dao-lancamentos';
 import { ToastService } from '../../service/toast.service';
+import { ModalService } from '../../service/modal.service';
 
 @Page({
 	templateUrl: 'build/pages/lancamentos/lancamentos.html',
@@ -9,14 +10,15 @@ import { ToastService } from '../../service/toast.service';
 })
 export class LancamentosPage {
 	static get parameters() {
-		return [[NavController], [DAOLancamentos], [ToastService]	];
+		return [[NavController], [DAOLancamentos], [ToastService], [ModalService]];
 	}
 
-	constructor(nav, dao, toastService) {
+	constructor(nav, dao, toastService, modalService) {
 		this.nav = nav;
 		this.dao = dao;
 		this.lancamentos = [];
 		this.toast = toastService;
+		this.modal = modalService;
 		this.getList();
 	}
 
@@ -29,7 +31,7 @@ export class LancamentosPage {
 	insert() {
 		let modal = this.createModal();
 	
-		this.onModalDismiss(modal, (data) => {
+		this.modal.onDismiss(modal, (data) => {
 			this.dao.save(data, 
 			(lancamento) => {
 				this.lancamentos.push(lancamento);
@@ -44,7 +46,7 @@ export class LancamentosPage {
 	edit(lancamento) {
 		let modal = this.createModal(lancamento);
 
-		this.onModalDismiss(modal, (data) => {
+		this.modal.onDismiss(modal, (data) => {
 			this.dao.edit(data,
 				(lancamento) => {
 					this.showToast('Lançamento alterado com sucesso!');
@@ -92,22 +94,15 @@ export class LancamentosPage {
 	}
 
 	createModal(parametro) {
-        let modal = parametro
-            ? Modal.create(ModalLancamentosPage, { parametro: parametro })
-            : Modal.create(ModalLancamentosPage);
-
-        return modal;
+		let modal = this.modal.create(ModalLancamentosPage, { parametro: parametro });
+		return modal;
     }
 
     showModal(modal) {
         this.nav.present(modal);
     }
 
-    onModalDismiss(modal, cb) {
-        modal.onDismiss(cb);
-    }
-
-	showToast(message) {
+  	showToast(message) {
 		this.toast.showShortBottom(message).subscribe((toast) => console.log(toast));
 	}
 }

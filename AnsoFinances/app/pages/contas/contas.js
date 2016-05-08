@@ -2,6 +2,7 @@ import { Page, Modal, NavController, Alert } from 'ionic-angular';
 import { DAOContas } from '../../dao/dao-contas';
 import { ModalContasPage } from '../modal-contas/modal-contas';
 import { ToastService } from '../../service/toast.service';
+import { ModalService } from '../../service/modal.service';
 import { provide } from 'angular2/core';
 
 @Page({
@@ -11,13 +12,14 @@ import { provide } from 'angular2/core';
 
 export class ContasPage {
     static get parameters() {
-        return [[NavController], [DAOContas], [ToastService]]
+        return [[NavController], [DAOContas], [ToastService], [ModalService]]
     }
 
-    constructor(nav, dao, toastService) {
+    constructor(nav, dao, toastService, modalService) {
         this.dao = dao;
         this.nav = nav;
         this.toast = toastService;
+        this.modal = modalService;
         this.getList();
     }
 
@@ -29,7 +31,8 @@ export class ContasPage {
 
     insert() {
         let modal = this.createModal();
-        this.onModalDismiss(modal,
+        
+        this.modal.onDismiss(modal,
             (data) => {
                 if (!data) return;
                 this.dao.save(data, (conta) => {
@@ -45,7 +48,8 @@ export class ContasPage {
     edit(conta) {
         //TODO bug alterar 
         let modal = this.createModal(conta);
-        this.onModalDismiss(modal,
+ 
+        this.modal.onDismiss(modal,
             (data) => {
                 this.dao.edit(data, (conta) => {
                     this.showToast('Conta alterada com sucesso!');
@@ -85,19 +89,12 @@ export class ContasPage {
     }
 
     createModal(parametro) {
-        let modal = parametro
-            ? Modal.create(ModalContasPage, { parametro: parametro })
-            : Modal.create(ModalContasPage);
-
+        let modal = this.modal.create(ModalContasPage, { parametro: parametro });
         return modal;
     }
 
     showModal(modal) {
         this.nav.present(modal);
-    }
-
-    onModalDismiss(modal, cb) {
-        modal.onDismiss(cb);
     }
 
     showToast(message) {
