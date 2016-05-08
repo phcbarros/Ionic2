@@ -6,7 +6,7 @@ import { DateService } from '../../service/date.service';
 
 @Page({
   templateUrl: 'build/pages/modal-lancamentos/modal-lancamentos.html',
-  providers: [DAOContas, DateService]
+  providers: [DAOContas]
 })
 
 export class ModalLancamentosPage {

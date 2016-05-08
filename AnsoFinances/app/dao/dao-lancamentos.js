@@ -22,8 +22,9 @@ export class DAOLancamentos {
             .catch((error) => this.errorHandler('Erro na criação da tabela lancamentos'));
     }
     
-    getList(successCallback, errorCallback) {
-        this.storage.query('SELECT id, descricao, valor, data, conta, entradaSaida, pago FROM lancamentos')
+    getList(dataInicio, dataFim, successCallback, errorCallback) {
+        this.storage.query('SELECT id, descricao, valor, data, conta, entradaSaida, pago FROM lancamentos WHERE data BETWEEN ? AND ?',
+            [dataInicio, dataFim])
             .then((data) => {
                 let lancamentos = [];
                 let i = 0;

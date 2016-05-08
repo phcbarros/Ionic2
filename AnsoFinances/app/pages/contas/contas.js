@@ -18,8 +18,8 @@ export class ContasPage {
     constructor(nav, dao, toastService, modalService) {
         this.dao = dao;
         this.nav = nav;
-        this.toast = toastService;
-        this.modal = modalService;
+        this.toastService = toastService;
+        this.modalService = modalService;
         this.getList();
     }
 
@@ -32,7 +32,7 @@ export class ContasPage {
     insert() {
         let modal = this.createModal();
         
-        this.modal.onDismiss(modal,
+        this.modalService.onDismiss(modal,
             (data) => {
                 if (!data) return;
                 this.dao.save(data, (conta) => {
@@ -49,7 +49,7 @@ export class ContasPage {
         //TODO bug alterar 
         let modal = this.createModal(conta);
  
-        this.modal.onDismiss(modal,
+        this.modalService.onDismiss(modal,
             (data) => {
                 this.dao.edit(data, (conta) => {
                     this.showToast('Conta alterada com sucesso!');
@@ -89,7 +89,7 @@ export class ContasPage {
     }
 
     createModal(parametro) {
-        let modal = this.modal.create(ModalContasPage, { parametro: parametro });
+        let modal = this.modalService.create(ModalContasPage, { parametro: parametro });
         return modal;
     }
 
@@ -98,6 +98,6 @@ export class ContasPage {
     }
 
     showToast(message) {
-        this.toast.showShortBottom(message).subscribe((toast) => console.log(toast));
+        this.toastService.showShortBottom(message).subscribe((toast) => console.log(toast));
     }
 }

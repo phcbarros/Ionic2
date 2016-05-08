@@ -3,27 +3,42 @@ import { ModalLancamentosPage } from '../modal-lancamentos/modal-lancamentos';
 import { DAOLancamentos } from '../../dao/dao-lancamentos';
 import { ToastService } from '../../service/toast.service';
 import { ModalService } from '../../service/modal.service';
+import { DateService } from '../../service/date.service';
+import { DataFilterComponent } from '../../components/data-filter.component';
 
 @Page({
 	templateUrl: 'build/pages/lancamentos/lancamentos.html',
+	directives: [DataFilterComponent],
 	providers: [DAOLancamentos]
 })
 export class LancamentosPage {
 	static get parameters() {
-		return [[NavController], [DAOLancamentos], [ToastService], [ModalService]];
+		return [[NavController], [DAOLancamentos], [ToastService], [ModalService], [DateService]];
 	}
 
-	constructor(nav, dao, toastService, modalService) {
+	constructor(nav, dao, toastService, modalService, dateService) {
 		this.nav = nav;
 		this.dao = dao;
+		this.toastService = toastService;
+		this.modalService = modalService;
+		this.dateService = dateService;
+		
 		this.lancamentos = [];
-		this.toast = toastService;
-		this.modal = modalService;
-		this.getList();
+		this.dataFiltro = new Date();
+		
+		this.updateMonth(this.dataFiltro);
 	}
 
-	getList() {
-		this.dao.getList(
+	updateMonth(date) {
+		this.dataFiltro = date;
+		let startDate = this.dateService.getFirstDay(date);
+		let endDate = this.dateService.getLastDay(date	);
+		
+		this.getList(startDate, endDate);
+	}
+	
+	getList(startDate, endDate) {	
+		this.dao.getList(startDate.getTime(), endDate.getTime(),
 			(lancamentos) => this.lancamentos = lancamentos,
 			(erro) => this.showToast(erro));
 	}
@@ -31,10 +46,10 @@ export class LancamentosPage {
 	insert() {
 		let modal = this.createModal();
 	
-		this.modal.onDismiss(modal, (data) => {
+		this.modalService.onDismiss(modal, (data) => {
 			this.dao.save(data, 
 			(lancamento) => {
-				this.lancamentos.push(lancamento);
+				this.updateMonth(new Date(lancamento.data));
 				this.showToast('Lançamento adicionado com sucesso!');
 			},
 			(erro) => this.showToast(erro));
@@ -46,9 +61,10 @@ export class LancamentosPage {
 	edit(lancamento) {
 		let modal = this.createModal(lancamento);
 
-		this.modal.onDismiss(modal, (data) => {
+		this.modalService.onDismiss(modal, (data) => {
 			this.dao.edit(data,
 				(lancamento) => {
+					this.updateMonth(new Date(lancamento.data));
 					this.showToast('Lançamento alterado com sucesso!');
 				},
 				(erro) => this.showToast(erro));
@@ -85,6 +101,10 @@ export class LancamentosPage {
 			(erro) => this.showToast(erro));
 	}
 
+	getDate(date) {
+		return this.dateService.parseString(date);
+	}
+
 	statusPagamento(lancamento){
 		return lancamento.pago ? 'Pago': 'Não pago';
 	}
@@ -94,7 +114,7 @@ export class LancamentosPage {
 	}
 
 	createModal(parametro) {
-		let modal = this.modal.create(ModalLancamentosPage, { parametro: parametro });
+		let modal = this.modalService.create(ModalLancamentosPage, { parametro: parametro });
 		return modal;
     }
 
@@ -103,6 +123,6 @@ export class LancamentosPage {
     }
 
   	showToast(message) {
-		this.toast.showShortBottom(message).subscribe((toast) => console.log(toast));
+		this.toastService.showShortBottom(message).subscribe((toast) => console.log(toast));
 	}
 }

@@ -5,13 +5,14 @@ import { ContasPage } from './pages/contas/contas';
 import { SqlStorageService } from './service/sql-storage.service';
 import { ToastService } from './service/toast.service';
 import { ModalService } from './service/modal.service';
+import { DateService } from './service/date.service';
 
 @App({
   templateUrl: 'build/app.html',
   config: {
     mode: 'md'
   }, // http://ionicframework.com/docs/v2/api/config/Config/
-  providers: [SqlStorageService, ToastService, ModalService]
+  providers: [SqlStorageService, ToastService, ModalService, DateService]
 })
 
 export class MyApp {

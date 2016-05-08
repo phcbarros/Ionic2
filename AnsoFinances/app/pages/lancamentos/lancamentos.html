@@ -6,6 +6,7 @@
 </ion-navbar>
 
 <ion-content padding class="lancamentos">
+  <data-filter [startDate]="dataFiltro" (changeMonth)="updateMonth($event)"></data-filter>
   <ion-list>
     <ion-item-sliding *ngFor="#item of lancamentos">
       <ion-item (click)="edit(item)" [ngClass]="{entrada: lancamentoEntrada(item), saida: !lancamentoEntrada(item) }">
@@ -13,7 +14,7 @@
           <ion-col width="67">
             <h2>{{item.descricao}}</h2>
             <p>{{item.conta}}</p>
-            <p>{{item.data | date : 'dd/MM/yyyy'}}</p>
+            <p>{{getDate(item.data)}}</p>
           </ion-col>
           <ion-col width="33">
             <p>{{item.valor | currency: "BRL":true:1.2}}</p>
