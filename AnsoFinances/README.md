@@ -8,3 +8,4 @@
 1. Aula 4 - Acessando o banco de dados (https://www.youtube.com/watch?v=utXTMzFfSHQ)
 1. Aula 5 - Android antigo e Crosswalk (https://www.youtube.com/watch?v=YsptMbYrNGw)
 1. Aula 6 - Criando nosso lançamentos (https://www.youtube.com/watch?v=vXBuCpBoYgw)
+1. Aula 7 - Formatando os lançamentos (https://www.youtube.com/watch?v=KtN2Qxm9YBY&index=7&list=PLpP8rO2FXVXQ1rg4Xc-r52xlSMDGOjO-X)

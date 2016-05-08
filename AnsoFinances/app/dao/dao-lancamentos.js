@@ -44,13 +44,30 @@ export class DAOLancamentos {
     
     save(lancamento, successCallback, errorCallback) {
         this.storage.query(`INSERT INTO lancamentos (descricao, valor, data, conta, entradaSaida, pago)
-            VALUES(?, ?, ?, ?, ?, ?)`, [lancamento.descricao, lancamento.valor, lancamento.data, lancamento.conta, lancamento.entradaSaida, lancamento.pago])
+            VALUES(?, ?, ?, ?, ?, ?)`, 
+            [lancamento.descricao, lancamento.valor, lancamento.data, lancamento.conta, lancamento.entradaSaida, lancamento.pago])
             .then((data) => {
                 lancamento.id = data.res.insertId;
                 successCallback(lancamento);
                 console.log('Gravou', lancamento);
             })
             .catch((error) => this.errorHandler('Erro na edição de dados de lancamentos', error, errorCallback));;
+    }
+    
+    edit(lancamento, successCallBack, errorCallback) {
+        this.storage.query(`UPDATE lancamentos SET descricao = ?, valor = ? , data = ?, conta = ?,
+            entradaSaida = ?, pago = ? WHERE id = ? `, 
+            [lancamento.descricao, lancamento.valor, lancamento.data, lancamento.conta, lancamento.entradaSaida, lancamento.pago, lancamento.id])
+            .then((data) => successCallBack(lancamento))
+            .catch((error) => this.errorHandler('Erro na edição de dados de lancamentos', error, errorCallback));
+    }
+    
+    delete(lancamento, successCallback, errorCallback){
+        this.storage.query('DELETE FROM lancamentos WHERE id = ?', [lancamento.id])
+            .then((data) => {
+               successCallback(lancamento); 
+            })
+            .catch((error) => this.errorHandler('Erro na exclusão de dados de lancamentos', error, errorCallback));
     }
     
     errorHandler(message, error, errorCallback){

@@ -12,22 +12,22 @@
 
     <ion-item>
       <ion-label stacked>Descrição</ion-label>
-      <ion-input type="text" [(ngModel)]="lancamento.descricao"></ion-input>
+      <ion-input type="text" [(ngModel)]="descricao"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Valor</ion-label>
-      <ion-input type="number" [(ngModel)]="lancamento.valor"></ion-input>
+      <ion-input type="number" [(ngModel)]="valor"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Data</ion-label>
-      <ion-input type="date" [(ngModel)]="lancamento.data"></ion-input>
+      <ion-input type="date" [(ngModel)]="data"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Entrada/Saida</ion-label>
-      <ion-select [(ngModel)]="lancamento.entradaSaida">
+      <ion-select [(ngModel)]="entradaSaida">
         <ion-option value="entrada">Entrada</ion-option>
         <ion-option value="saida">Saida</ion-option>
       </ion-select>
@@ -35,7 +35,7 @@
 
     <ion-item>
       <ion-label stacked>Conta</ion-label>
-      <ion-select [(ngModel)]="lancamento.conta">
+      <ion-select [(ngModel)]="conta">
         <ion-option *ngFor="#item of contas" value="{{item.descricao}}">
           {{item.descricao}}
         </ion-option>
@@ -44,7 +44,7 @@
 
     <ion-item>
       <ion-label stacked>Pago</ion-label>
-      <ion-checkbox [(ngModel)]="lancamento.pago"></ion-checkbox>
+      <ion-checkbox [(ngModel)]="pago"></ion-checkbox>
     </ion-item>
 
   </ion-list>

@@ -7,18 +7,26 @@
 
 <ion-content padding class="lancamentos">
   <ion-list>
-    <ion-item *ngFor="#item of lancamentos">
-      <ion-row>
-        <ion-col width="67">
-          <h2>{{item.descricao}}</h2>
-          <p>{{item.conta}}</p>
-        </ion-col>
-        <ion-col width="33">
-          <p>{{item.valor}}</p>
-          <p>{{item.pago}}</p>  
-        </ion-col>
-      </ion-row>  
-    </ion-item>
+    <ion-item-sliding *ngFor="#item of lancamentos">
+      <ion-item (click)="edit(item)" [ngClass]="{entrada: lancamentoEntrada(item), saida: !lancamentoEntrada(item) }">
+        <ion-row>
+          <ion-col width="67">
+            <h2>{{item.descricao}}</h2>
+            <p>{{item.conta}}</p>
+            <p>{{item.data | date : 'dd/MM/yyyy'}}</p>
+          </ion-col>
+          <ion-col width="33">
+            <p>{{item.valor | currency: "BRL":true:1.2}}</p>
+            <p>{{statusPagamento(item)}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item-options>
+        <button danger (click)="delete(item)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options> 
+    </ion-item-sliding>
   </ion-list>
   <button fab fab-bottom fab-right danger (click)="insert()">
     <ion-icon name="add"></ion-icon>

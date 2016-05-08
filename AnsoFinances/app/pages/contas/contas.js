@@ -6,7 +6,7 @@ import { provide } from 'angular2/core';
 
 @Page({
     templateUrl: 'build/pages/contas/contas.html',
-    providers: [provide(DAOContas, {useClass: DAOContas})]
+    providers: [provide(DAOContas, { useClass: DAOContas })]
 })
 
 export class ContasPage {
@@ -29,28 +29,30 @@ export class ContasPage {
 
     insert() {
         let modal = this.createModal();
-        this.onModalDismiss(modal, (data) => {
-            if (!data) return;
-            this.dao.save(data, (conta) => {
-                this.contas.push(conta);
-                this.showToast('Conta adicionada com sucesso!');
-            });
-        }, 
-        (erro) => this.showToast(erro));
-        
+        this.onModalDismiss(modal,
+            (data) => {
+                if (!data) return;
+                this.dao.save(data, (conta) => {
+                    this.contas.push(conta);
+                    this.showToast('Conta adicionada com sucesso!');
+                });
+            },
+            (erro) => this.showToast(erro));
+
         this.showModal(modal);
     }
 
     edit(conta) {
         //TODO bug alterar 
         let modal = this.createModal(conta);
-        this.onModalDismiss(modal, (data) => {
-            this.dao.edit(data, (conta) => {
-                this.showToast('Conta alterada com sucesso!');
-            });
-        },  
-        (erro) => this.showToast(erro));
-        
+        this.onModalDismiss(modal,
+            (data) => {
+                this.dao.edit(data, (conta) => {
+                    this.showToast('Conta alterada com sucesso!');
+                });
+            },
+            (erro) => this.showToast(erro));
+
         this.showModal(modal);
     }
 
@@ -73,12 +75,13 @@ export class ContasPage {
     }
 
     confirmDelete(conta) {
-        this.dao.delete(conta, (data) => {
-            let index = this.contas.indexOf(conta);
-            this.contas.splice(index, 1);
-            this.showToast('Conta excluída com sucesso!');
-        }, 
-        (erro) => this.showToast(erro));
+        this.dao.delete(conta,
+            (data) => {
+                let index = this.contas.indexOf(conta);
+                this.contas.splice(index, 1);
+                this.showToast('Conta excluída com sucesso!');
+            },
+            (erro) => this.showToast(erro));
     }
 
     createModal(parametro) {
