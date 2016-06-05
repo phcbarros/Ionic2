@@ -20,6 +20,9 @@ export class ContasPage {
         this.nav = nav;
         this.toastService = toastService;
         this.modalService = modalService;
+    }
+    
+    ngOnInit(){
         this.getList();
     }
 

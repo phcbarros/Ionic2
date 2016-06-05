@@ -71,6 +71,31 @@ export class DAOLancamentos {
             .catch((error) => this.errorHandler('Erro na exclusão de dados de lancamentos', error, errorCallback));
     }
     
+    getSaldo(successCallback, errorCallback){
+        this.storage.query(`
+                SELECT TOTAL(valor) AS saldo, entradaSaida FROM lancamentos WHERE pago = 1 AND entradaSaida = 'entrada'
+                UNION
+                SELECT TOTAL(valor) AS saldo, entradaSaida FROM lancamentos WHERE pago = 1 AND entradaSaida = 'saida'
+            `, [])
+            .then((data) => {
+                let saldo = 0;
+                let l = data.res.rows.length;
+                let rows = data.res.rows;
+                
+                for (let i = 0; l--; i++) {
+                    let item = rows.item(i);
+                    
+                    if(item.entradaSaida === 'entrada')
+                        saldo += item.saldo;
+                    else
+                        saldo -= item.saldo;     
+                }
+                
+                successCallback(saldo);
+            })
+            .catch((error) => this.errorHandler('Erro ao recuperar o saldo dos lancamentos', error, errorCallback));
+    }
+    
     errorHandler(message, error, errorCallback){
         console.error(message, error);
         if(errorCallback) errorCallback(message);

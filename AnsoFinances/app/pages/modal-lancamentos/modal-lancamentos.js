@@ -28,7 +28,9 @@ export class ModalLancamentosPage {
     this.entradaSaida = this.lancamento.entradaSaida;
     this.conta = this.lancamento.conta;
     this.pago = this.lancamento.pago;
-    
+  }
+  
+  ngOnInit(){
     this.getContas();
   }
   
@@ -61,7 +63,6 @@ export class ModalLancamentosPage {
   
   _getDate(date) {
       let dataFormatada =  this.dateService.formatDate(date);
-      
       return dataFormatada;
   }
   

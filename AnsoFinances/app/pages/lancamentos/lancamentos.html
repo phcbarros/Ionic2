@@ -23,6 +23,10 @@
         </ion-row>
       </ion-item>
       <ion-item-options>
+        <button (click)="paymentUpdateStatus(item)">
+          <ion-icon name="cash"></ion-icon>
+          {{item.pago ? 'Reabrir' : 'Pagar'}}
+        </button>
         <button danger (click)="delete(item)">
           <ion-icon name="trash"></ion-icon>
         </button>

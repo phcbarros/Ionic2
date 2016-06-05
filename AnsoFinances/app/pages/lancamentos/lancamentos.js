@@ -1,4 +1,4 @@
-import { Page, NavController, Modal, Alert } from 'ionic-angular';
+import { Page, NavController, Modal, Alert, Events } from 'ionic-angular';
 import { ModalLancamentosPage } from '../modal-lancamentos/modal-lancamentos';
 import { DAOLancamentos } from '../../dao/dao-lancamentos';
 import { ToastService } from '../../service/toast.service';
@@ -13,28 +13,31 @@ import { DataFilterComponent } from '../../components/data-filter.component';
 })
 export class LancamentosPage {
 	static get parameters() {
-		return [[NavController], [DAOLancamentos], [ToastService], [ModalService], [DateService]];
+		return [[NavController], [DAOLancamentos], [ToastService], [ModalService], [DateService], [Events]];
 	}
 
-	constructor(nav, dao, toastService, modalService, dateService) {
+	constructor(nav, dao, toastService, modalService, dateService, events) {
 		this.nav = nav;
 		this.dao = dao;
 		this.toastService = toastService;
 		this.modalService = modalService;
 		this.dateService = dateService;
-		
-		this.lancamentos = [];
+		this.events = events;
+	}
+
+	ngOnInit(){
 		this.dataFiltro = new Date();
-		
+		this.lancamentos = [];
 		this.updateMonth(this.dataFiltro);
 	}
 
 	updateMonth(date) {
 		this.dataFiltro = date;
 		let startDate = this.dateService.getFirstDay(date);
-		let endDate = this.dateService.getLastDay(date	);
+		let endDate = this.dateService.getLastDay(date);
 		
 		this.getList(startDate, endDate);
+		this.updateSaldo();
 	}
 	
 	getList(startDate, endDate) {	
@@ -62,12 +65,7 @@ export class LancamentosPage {
 		let modal = this.createModal(lancamento);
 
 		this.modalService.onDismiss(modal, (data) => {
-			this.dao.edit(data,
-				(lancamento) => {
-					this.updateMonth(new Date(lancamento.data));
-					this.showToast('Lançamento alterado com sucesso!');
-				},
-				(erro) => this.showToast(erro));
+			this.updateLancamento(data);
 		});
 
 		this.showModal(modal);
@@ -94,13 +92,32 @@ export class LancamentosPage {
 	confirmDelete(lancamento) {
 		this.dao.delete(lancamento,
 			() => {
-				let index = this.lancamentos.indexOf(lancamento);
-				this.lancamentos.splice(index, 1);
+				this.updateMonth(new Date(lancamento.data));
 				this.showToast('Lançamento excluído com sucesso!');
 			},
 			(erro) => this.showToast(erro));
 	}
 
+	updateSaldo(){
+		this.dao.getSaldo((saldo) => {
+			this.events.publish('saldo:updated', saldo);	
+		});
+	}
+	
+	updateLancamento(data){
+		this.dao.edit(data,
+				(lancamento) => {
+					this.updateMonth(new Date(lancamento.data));
+					this.showToast('Lançamento alterado com sucesso!');
+				},
+				(erro) => this.showToast(erro));
+	}
+	
+	paymentUpdateStatus(lancamento){
+		lancamento.pago = lancamento.pago ? 0 : 1;
+		this.updateLancamento(lancamento);
+	}
+	
 	getDate(date) {
 		return this.dateService.parseString(date);
 	}
