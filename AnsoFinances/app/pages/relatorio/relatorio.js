@@ -24,7 +24,6 @@ export class RelatorioPage {
     this.entradaSaida = 'entrada';
     this.contas = [];
     this.dataFiltro = this.params.get('dataFiltro');
-    
     this.getListGroupByConta(this.dataFiltro, this.entradaSaida);        
   }
   

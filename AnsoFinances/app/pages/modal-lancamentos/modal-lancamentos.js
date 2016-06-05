@@ -14,23 +14,24 @@ export class ModalLancamentosPage {
     return [[NavController], [ViewController], [NavParams], [DAOContas], [ToastService], [DateService]];
   }
 
-  constructor(nav, view, params, daoContas, toast, date) {
+  constructor(nav, view, params, daoContas, toast, dateService) {
     this.nav = nav;
     this.view = view;
     this.daoContas = daoContas;
     this.toast = toast;
-    this.dateService = date;
-    this.lancamento = params.get('parametro') || new Lancamento();
-    
+    this.dateService = dateService;
+    this.params = params;
+  }
+  
+  ngOnInit(){
+    this.lancamento = this.params.get('parametro') || new Lancamento();
     this.descricao = this.lancamento.descricao;
     this.valor = this.lancamento.valor;
     this.data = this._getDate(this.lancamento.data);
     this.entradaSaida = this.lancamento.entradaSaida;
     this.conta = this.lancamento.conta;
     this.pago = this.lancamento.pago;
-  }
-  
-  ngOnInit(){
+    
     this.getContas();
   }
   
@@ -49,7 +50,7 @@ export class ModalLancamentosPage {
     
     this.lancamento.descricao = this.descricao;
     this.lancamento.valor = parseFloat(this.valor);
-    this.lancamento.data = data.getTime();
+    this.lancamento.data = data;
     this.lancamento.entradaSaida = this.entradaSaida;
     this.lancamento.conta = this.conta;
     this.lancamento.pago = this.pago ? 1 : 0;

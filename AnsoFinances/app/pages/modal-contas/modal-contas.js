@@ -16,7 +16,11 @@ export class ModalContasPage {
   
   constructor(view, params, conta) {
     this._view = view;
-    this.conta = params.get('parametro') || conta;
+    this.params = params;
+  }
+  
+  ngOnInit(){
+    this.conta = this.params.get('parametro') || conta;
   }
   
   close() {

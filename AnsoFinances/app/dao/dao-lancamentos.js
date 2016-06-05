@@ -24,7 +24,7 @@ export class DAOLancamentos {
     
     getList(dataInicio, dataFim, successCallback, errorCallback) {
         this.storage.query('SELECT id, descricao, valor, data, conta, entradaSaida, pago FROM lancamentos WHERE data BETWEEN ? AND ?',
-            [dataInicio, dataFim])
+            [dataInicio.getTime(), dataFim.getTime()])
             .then((data) => {
                 let lancamentos = [];
                 let i = 0;
@@ -46,7 +46,7 @@ export class DAOLancamentos {
     save(lancamento, successCallback, errorCallback) {
         this.storage.query(`INSERT INTO lancamentos (descricao, valor, data, conta, entradaSaida, pago)
             VALUES(?, ?, ?, ?, ?, ?)`, 
-            [lancamento.descricao, lancamento.valor, lancamento.data, lancamento.conta, lancamento.entradaSaida, lancamento.pago])
+            [lancamento.descricao, lancamento.valor, lancamento.data.getTime(), lancamento.conta, lancamento.entradaSaida, lancamento.pago])
             .then((data) => {
                 lancamento.id = data.res.insertId;
                 successCallback(lancamento);
@@ -58,7 +58,7 @@ export class DAOLancamentos {
     edit(lancamento, successCallBack, errorCallback) {
         this.storage.query(`UPDATE lancamentos SET descricao = ?, valor = ? , data = ?, conta = ?,
             entradaSaida = ?, pago = ? WHERE id = ? `, 
-            [lancamento.descricao, lancamento.valor, lancamento.data, lancamento.conta, lancamento.entradaSaida, lancamento.pago, lancamento.id])
+            [lancamento.descricao, lancamento.valor, lancamento.data.getTime(), lancamento.conta, lancamento.entradaSaida, lancamento.pago, lancamento.id])
             .then((data) => successCallBack(lancamento))
             .catch((error) => this.errorHandler('Erro na edição de dados de lancamentos', error, errorCallback));
     }

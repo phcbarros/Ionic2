@@ -46,7 +46,7 @@ export class LancamentosPage {
 	}
 	
 	getList(startDate, endDate) {	
-		this.dao.getList(startDate.getTime(), endDate.getTime(),
+		this.dao.getList(startDate, endDate,
 			(lancamentos) => this.lancamentos = lancamentos,
 			(erro) => this.showToast(erro));
 	}
