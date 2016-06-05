@@ -6,8 +6,11 @@
 </ion-navbar>
 
 <ion-content>
+    <ion-row>
+        <ion-input type="text" [(ngModel)]="listFilter" placeholder="Digite o nome da conta..."></ion-input>
+    </ion-row>
     <ion-list>
-        <ion-item-sliding *ngFor="#conta of contas | contaSort">
+        <ion-item-sliding *ngFor="#conta of contas | contaSort | contaFilter:listFilter">
             <ion-item (click)="edit(conta)">
                 {{ conta.descricao }}
             </ion-item>

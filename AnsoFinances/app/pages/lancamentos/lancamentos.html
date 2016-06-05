@@ -11,11 +11,10 @@
     (changeMonth)="onUpdateMonth($event)" 
     (selectMonth)="onSelectMonth($event)"></data-filter>
   <ion-row>
-    <ion-input type="text" [(ngModel)]="listFilter" placeholder="Digite o nome"></ion-input>
+    <ion-input type="text" [(ngModel)]="listFilter" placeholder="Digite o nome lançamento..."></ion-input>
   </ion-row>
   <ion-list>
-    <ion-item-sliding 
-      *ngFor="#item of lancamentos | lancamentoSort:'data' | lancamentoFilter:listFilter">
+    <ion-item-sliding *ngFor="#item of lancamentos | lancamentoSort:'data' | lancamentoFilter:listFilter">
       <ion-item (click)="edit(item)" [ngClass]="{entrada: lancamentoEntrada(item), saida: !lancamentoEntrada(item) }">
         <ion-row>
           <ion-col width="67">

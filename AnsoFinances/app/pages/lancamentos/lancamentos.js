@@ -30,6 +30,7 @@ export class LancamentosPage {
 	}
 
 	ngOnInit(){
+		this.listFilter = '';
 		this.dataFiltro = new Date();
 		this.lancamentos = [];
 		this.onUpdateMonth(this.dataFiltro);
