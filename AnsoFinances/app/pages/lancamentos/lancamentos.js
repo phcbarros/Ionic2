@@ -6,11 +6,13 @@ import { DAOLancamentos } from '../../dao/dao-lancamentos';
 import { ToastService } from '../../service/toast.service';
 import { ModalService } from '../../service/modal.service';
 import { DateService } from '../../service/date.service';
+import { LancamentoSortPipe } from './lancamento-sort.pipe';
 
 @Page({
 	templateUrl: 'build/pages/lancamentos/lancamentos.html',
 	directives: [DataFilterComponent],
-	providers: [DAOLancamentos]
+	providers: [DAOLancamentos],
+	pipes: [LancamentoSortPipe]
 })
 export class LancamentosPage {
 	static get parameters() {

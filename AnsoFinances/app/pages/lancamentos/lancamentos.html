@@ -11,7 +11,7 @@
     (changeMonth)="onUpdateMonth($event)" 
     (selectMonth)="onSelectMonth($event)"></data-filter>
   <ion-list>
-    <ion-item-sliding *ngFor="#item of lancamentos">
+    <ion-item-sliding *ngFor="#item of lancamentos | lancamentoSort:'data'">
       <ion-item (click)="edit(item)" [ngClass]="{entrada: lancamentoEntrada(item), saida: !lancamentoEntrada(item) }">
         <ion-row>
           <ion-col width="67">
