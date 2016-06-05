@@ -4,12 +4,13 @@ import { ModalContasPage } from '../modal-contas/modal-contas';
 import { ToastService } from '../../service/toast.service';
 import { ModalService } from '../../service/modal.service';
 import { provide } from 'angular2/core';
+import { ContaSortPipe } from './conta-sort.pipe';
 
 @Page({
     templateUrl: 'build/pages/contas/contas.html',
-    providers: [provide(DAOContas, { useClass: DAOContas })]
+    providers: [provide(DAOContas, { useClass: DAOContas })],
+    pipes: [ContaSortPipe]
 })
-
 export class ContasPage {
     static get parameters() {
         return [[NavController], [DAOContas], [ToastService], [ModalService]]
@@ -23,6 +24,7 @@ export class ContasPage {
     }
     
     ngOnInit(){
+        this.contas = [];
         this.getList();
     }
 

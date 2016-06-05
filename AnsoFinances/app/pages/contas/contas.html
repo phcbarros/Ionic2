@@ -7,7 +7,7 @@
 
 <ion-content>
     <ion-list>
-        <ion-item-sliding *ngFor="#conta of contas">
+        <ion-item-sliding *ngFor="#conta of contas | contaSort">
             <ion-item (click)="edit(conta)">
                 {{ conta.descricao }}
             </ion-item>
