@@ -6,7 +6,7 @@ import { DateService } from '../service/date.service';
     selector: 'data-filter',
     directives: [IONIC_DIRECTIVES],
     inputs: ['startDate'],
-    outputs: ['changeMonth'],
+    outputs: ['changeMonth', 'selectMonth'],
     template: `
         <ion-row>
             <ion-col width-10>
@@ -15,7 +15,7 @@ import { DateService } from '../service/date.service';
                 </button>  
             </ion-col>  
             <ion-col width-80>
-                <h4 favorite class="center">{{selectedMonth}}</h4>
+                <h4 favorite class="center" (click)="executeSelectMonth()">{{selectedMonth}}</h4>
             </ion-col>
             <ion-col width-10>
                 <button favorite clear round (click)="nextMonth()">
@@ -35,6 +35,7 @@ export class DataFilterComponent {
     constructor(dateService) {
         this.dateService = dateService;
         this.changeMonth = new EventEmitter();
+        this.selectMonth = new EventEmitter();
     }
     
     ngOnInit(){
@@ -55,6 +56,10 @@ export class DataFilterComponent {
     
     _executeChangeMonth(date) {
         this.changeMonth.next(date);
+    }
+    
+    executeSelectMonth() {
+        this.selectMonth.next(this.startDate);
     }
     
     previousMonth(){

@@ -1,4 +1,4 @@
-import {Page, NavController, Events } from 'ionic-angular';
+import { Page, NavController, Events } from 'ionic-angular';
 import { DAOLancamentos } from '../../dao/dao-lancamentos';
 import { ToastService } from '../../service/toast.service';
 

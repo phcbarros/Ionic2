@@ -6,7 +6,10 @@
 </ion-navbar>
 
 <ion-content padding class="lancamentos">
-  <data-filter [startDate]="dataFiltro" (changeMonth)="updateMonth($event)"></data-filter>
+  <data-filter 
+    [startDate]="dataFiltro" 
+    (changeMonth)="onUpdateMonth($event)" 
+    (selectMonth)="onSelectMonth($event)"></data-filter>
   <ion-list>
     <ion-item-sliding *ngFor="#item of lancamentos">
       <ion-item (click)="edit(item)" [ngClass]="{entrada: lancamentoEntrada(item), saida: !lancamentoEntrada(item) }">

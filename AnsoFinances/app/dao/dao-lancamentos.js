@@ -96,6 +96,38 @@ export class DAOLancamentos {
             .catch((error) => this.errorHandler('Erro ao recuperar o saldo dos lancamentos', error, errorCallback));
     }
     
+    getListGroupByConta(dataInicio, dataFim, entradaSaida, successCallback, errorCallback){
+        this.storage.query(`
+                SELECT TOTAL(valor) AS total, conta FROM lancamentos
+                    WHERE pago = 1 AND data BETWEEN ? AND ? AND entradaSaida = ?
+                    GROUP BY conta;
+            `,  [
+                dataInicio.getTime(),
+                dataFim.getTime(),
+                entradaSaida
+            ])
+            .then((data) => {
+                let contas = [];
+                let l = data.res.rows.length;
+                let rows = data.res.rows;
+                
+                for (let i = 0; l--; i++) {
+                    let item = rows.item(i);
+                    
+                    let conta = {
+                        nome: item.conta,
+                        saldo: item.total,
+                        percentual: 0
+                    };
+                    
+                    contas.push(conta);
+                }
+                
+                successCallback(contas);
+            })
+            .catch((error) => this.errorHandler('Erro ao recuperar saldos por conta', error, errorCallback));
+    }
+    
     errorHandler(message, error, errorCallback){
         console.error(message, error);
         if(errorCallback) errorCallback(message);

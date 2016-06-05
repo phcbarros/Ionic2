@@ -1,10 +1,11 @@
 import { Page, NavController, Modal, Alert, Events } from 'ionic-angular';
 import { ModalLancamentosPage } from '../modal-lancamentos/modal-lancamentos';
+import { RelatorioPage } from '../relatorio/relatorio';
+import { DataFilterComponent } from '../../components/data-filter.component';
 import { DAOLancamentos } from '../../dao/dao-lancamentos';
 import { ToastService } from '../../service/toast.service';
 import { ModalService } from '../../service/modal.service';
 import { DateService } from '../../service/date.service';
-import { DataFilterComponent } from '../../components/data-filter.component';
 
 @Page({
 	templateUrl: 'build/pages/lancamentos/lancamentos.html',
@@ -28,16 +29,20 @@ export class LancamentosPage {
 	ngOnInit(){
 		this.dataFiltro = new Date();
 		this.lancamentos = [];
-		this.updateMonth(this.dataFiltro);
+		this.onUpdateMonth(this.dataFiltro);
 	}
 
-	updateMonth(date) {
+	onUpdateMonth(date) {
 		this.dataFiltro = date;
 		let startDate = this.dateService.getFirstDay(date);
 		let endDate = this.dateService.getLastDay(date);
 		
 		this.getList(startDate, endDate);
 		this.updateSaldo();
+	}
+	
+	onSelectMonth(dataFiltro){
+		this.nav.push(RelatorioPage,  { dataFiltro: dataFiltro });
 	}
 	
 	getList(startDate, endDate) {	
@@ -52,7 +57,7 @@ export class LancamentosPage {
 		this.modalService.onDismiss(modal, (data) => {
 			this.dao.save(data, 
 			(lancamento) => {
-				this.updateMonth(new Date(lancamento.data));
+				this.onUpdateMonth(new Date(lancamento.data));
 				this.showToast('Lançamento adicionado com sucesso!');
 			},
 			(erro) => this.showToast(erro));
@@ -92,7 +97,7 @@ export class LancamentosPage {
 	confirmDelete(lancamento) {
 		this.dao.delete(lancamento,
 			() => {
-				this.updateMonth(new Date(lancamento.data));
+				this.onUpdateMonth(new Date(lancamento.data));
 				this.showToast('Lançamento excluído com sucesso!');
 			},
 			(erro) => this.showToast(erro));
@@ -107,7 +112,7 @@ export class LancamentosPage {
 	updateLancamento(data){
 		this.dao.edit(data,
 				(lancamento) => {
-					this.updateMonth(new Date(lancamento.data));
+					this.onUpdateMonth(new Date(lancamento.data));
 					this.showToast('Lançamento alterado com sucesso!');
 				},
 				(erro) => this.showToast(erro));
